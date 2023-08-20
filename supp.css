@@ -1,0 +1,97 @@
+.top-bar {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  height: 100vh;
+}
+
+#nav-bar {
+  background-color: #C9DBBA;
+  overflow: hidden;
+  font-family: Arial;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 90px;
+  line-height: 90px;
+  list-style-type: none;
+  padding: 0;
+}
+
+#nav-bar li {
+  display: inline-block;
+}
+
+#nav-bar a {
+  color: #333;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+#nav-bar a:hover,
+.dropdown:hover .dropbtn {
+  background-color: #9297C4;
+}
+.petstorelogo {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-top: -6px;
+}
+
+.right-corner {
+  margin-left: auto;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    margin: auto;
+    text-align: center;
+    font-family: arial;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+}
+
+.price {
+    color: grey;
+    font-size: 22px;
+}
+
+.card button {
+    border: none;
+    outline: 0;
+    padding: 12px;
+    color: white;
+    background-color: #000;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+}
+
+.card button:hover {
+    opacity: 0.7;
+}
+
+.column {
+    flex: 25%;
+    max-width: 25%;
+    padding: 0 10px;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.row {
+    margin: 0 -10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
