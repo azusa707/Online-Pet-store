@@ -36,7 +36,7 @@ $selectWishlistHistory = mysqli_query($conn, "SELECT * FROM cart");
       </div>
       <br><br>
     <div class="wishlist" style="font-size: 2rem">
-        <h2 style="text-align: left;">Wishlist History</h2>
+        <h2>Wishlist History</h2>
         <table>
             <tr>
                 <th>User ID</th>
