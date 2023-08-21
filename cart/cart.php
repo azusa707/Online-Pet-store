@@ -97,9 +97,6 @@ if (isset($_SESSION['user_id'])) {
   <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
 </head>
 <?php
-// session_start();
-
-// Function to calculate the total price of items in the cart
 function calculateTotalPrice($cart)
 {
   $total = 0;
@@ -114,7 +111,7 @@ if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart'])) {
   $_SESSION['cart'] = array();
 }
 
-// Handle adding items to the cart
+// Handle adding items to the wishlist
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["add_to_cart"])) {
   $product_id = $_POST["product_id"];
   $product_name = $_POST["product_name"];
@@ -128,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["add_to_cart"])) {
     'quantity' => $quantity
   );
 
-  // Check if the item already exists in the cart
+  // Check if the item already exists in the wishlist
   if (isset($_SESSION['cart'][$product_id])) {
     $_SESSION['cart'][$product_id]['quantity'] += $quantity;
   } else {
@@ -136,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["add_to_cart"])) {
   }
 }
 
-// Handle item removal from the cart
+// Handle item removal from the wishlist
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["remove_product_id"])) {
   $remove_product_id = $_POST["remove_product_id"];
   // Check if the product is in the cart
