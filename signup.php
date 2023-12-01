@@ -3,7 +3,7 @@ session_start(); // Start the session
 
 $servername = "localhost"; 
 $username = "root"; 
-$password = ""; 
+$password = "root"; 
 $dbname = "petstore"; 
 
 // Create connection

@@ -1,6 +1,6 @@
 <?php
 
-$conn = mysqli_connect('localhost','root','','petstore');
+$conn = mysqli_connect('localhost','root','root','petstore');
 
 $id = $_GET['edit'];
 

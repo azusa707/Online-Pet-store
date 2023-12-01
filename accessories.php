@@ -1,6 +1,6 @@
 <?php
 session_start();
-$conn = mysqli_connect('localhost', 'root', '', 'petstore');
+$conn = mysqli_connect('localhost', 'root', 'root', 'petstore');
 ?>
 <!DOCTYPE html>
 <html lang="en">
