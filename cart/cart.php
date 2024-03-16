@@ -1,10 +1,13 @@
 <?php
 session_start();
-$connection = mysqli_connect('localhost', 'root', '', 'petstore');
+$connection = mysqli_connect('localhost', 'root', 'root', 'petstore');
+
 // Check if the 'cart' session array exists
 if (!isset($_SESSION['cart'])) {
   $_SESSION['cart'] = array();
 }
+
+
 
 // Handle adding products to the cart
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["product_id"])) {
@@ -84,7 +87,9 @@ if (isset($_SESSION['user_id'])) {
   if (!is_array($cart)) {
     $cart = array(); // Handle case where $cart is not an array
   }
+  $totalPrice = calculateTotalPrice($cart);
 }
+include 'setting.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -161,7 +166,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["remove_product_id"])) 
         $total = $item['product_price'] * $item['quantity'];
         echo '<div class="basket-product">';
         echo '<div class="item">';
-       
+
         echo '<div class="product-details">';
         echo '<h1><strong><span class="item-quantity">' . $item['quantity'] . '</span> x ' . $item['product_name'] . '</strong></h1>';
         echo '<p><strong>Product Code - ' . $item['product_id'] . '</strong></p>';
@@ -196,11 +201,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["remove_product_id"])) 
           <div class="total-value final-value" id="basket-total"><?php echo calculateTotalPrice($_SESSION['cart']); ?>
           </div>
         </div>
-        <form method="get" action="../home.php">
-        <div class="summary-checkout">
-          <button class="checkout-cta">Go Back</button>
-        </div>
+        <!-- <form method="post" action="payment.php">
+          <div class="summary-checkout">
+            <button type="submit" class="checkout-cta">Continue</button>
+          </div>
+        </form> -->
+       
+        <form action="<?php echo $epay_url?> " method="POST">
+    <input value="<?php echo calculateTotalPrice($_SESSION['cart']); ?>" name="tAmt" type="hidden">
+    <input value="<?php echo calculateTotalPrice($_SESSION['cart']); ?>" name="amt" type="hidden">
+    <input value="0" name="txAmt" type="hidden">
+    <input value="0" name="psc" type="hidden">
+    <input value="0" name="pdc" type="hidden">
+    <input value="EPAYTEST" name="scd" type="hidden">
+    <input value="<?php echo $epay_url?>" name="pid" type="hidden">
+    <input value="http://merchant.com.np/page/esewa_payment_success?q=su" type="hidden" name="su">
+    <input value="http://merchant.com.np/page/esewa_payment_failed?q=fu" type="hidden" name="fu">
+    <input value="Pay with E-sewa" type="submit" class="checkout-cta">
     </form>
+        <div class="summary-checkout">
+            <button Continue</button>
       </div>
     </aside>
   </main>
