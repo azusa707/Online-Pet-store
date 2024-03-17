@@ -89,7 +89,6 @@ if (isset($_SESSION['user_id'])) {
   }
   $totalPrice = calculateTotalPrice($cart);
 }
-include 'setting.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -148,8 +147,69 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["remove_product_id"])) 
   }
 }
 
-?>
 
+
+if (!isset($_SESSION['user_id'])) {
+  header("Location: login.php"); // Adjust the redirection URL according to your file structure
+  exit();
+} else {
+  // Include necessary files
+  
+  include 'setting.php';
+
+  // Retrieve the logged-in user's user_id
+  $user_id = $_SESSION['user_id'];
+
+  // Initialize array to store transaction details for each item
+  $transactionDetails = array();
+
+  // Fetch cart item details from the database
+  foreach ($_SESSION['cart'] as $cartItem) {
+      $product_id = $cartItem['product_id']; // Assuming you're passing product_id through URL
+      $query = "SELECT * FROM cart WHERE user_id = ? AND product_id = ?";
+      $stmt = $connection->prepare($query);
+      $stmt->bind_param("ii", $user_id, $product_id);
+      $stmt->execute();
+      $result = $stmt->get_result();
+
+      if ($result->num_rows > 0) {
+          $cart_item = $result->fetch_assoc();
+
+          // Parameters for the transaction
+          $amount = $cart_item['product_price']; // Price of the product from the cart
+          $tax_amount = 0; // You may adjust this according to your requirements
+          $total_amount = $amount + $tax_amount;
+          $transaction_uuid = uuidv4();
+          $product_code = "EPAYTEST" ; // Adjust if you have specific product codes
+          $product_service_charge = 0; // Adjust if applicable
+          $product_delivery_charge = 0; // Adjust if applicable
+          $success_url = "http://localhost/petstore/logout.php"; // Redirect URL after successful payment
+          $failure_url = "http://localhost/petstore/home.php"; // Redirect URL after failed or pending transaction
+
+          // Generate HMAC signature
+          $signature = calculateSignature($total_amount, $transaction_uuid, $product_code, $secretKey);
+
+          // Store transaction details for this item
+          $transactionDetails[] = array(
+              'amount' => $amount,
+              'tax_amount' => $tax_amount,
+              'total_amount' => $total_amount,
+              'transaction_uuid' => $transaction_uuid,
+              'product_code' => $product_code,
+              'product_service_charge' => $product_service_charge,
+              'product_delivery_charge' => $product_delivery_charge,
+              'success_url' => $success_url,
+              'failure_url' => $failure_url,
+              'signature' => $signature
+          );
+      } else {
+          echo "Error: No cart item found for the provided product_id.";
+          exit();
+      }
+  }
+}
+
+?>
 <body>
   <main>
     <div class="basket">
@@ -206,22 +266,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["remove_product_id"])) 
             <button type="submit" class="checkout-cta">Continue</button>
           </div>
         </form> -->
-       
-        <form action="<?php echo $epay_url?> " method="POST">
-    <input value="<?php echo calculateTotalPrice($_SESSION['cart']); ?>" name="tAmt" type="hidden">
-    <input value="<?php echo calculateTotalPrice($_SESSION['cart']); ?>" name="amt" type="hidden">
-    <input value="0" name="txAmt" type="hidden">
-    <input value="0" name="psc" type="hidden">
-    <input value="0" name="pdc" type="hidden">
-    <input value="EPAYTEST" name="scd" type="hidden">
-    <input value="<?php echo $epay_url?>" name="pid" type="hidden">
-    <input value="http://merchant.com.np/page/esewa_payment_success?q=su" type="hidden" name="su">
-    <input value="http://merchant.com.np/page/esewa_payment_failed?q=fu" type="hidden" name="fu">
-    <input value="Pay with E-sewa" type="submit" class="checkout-cta">
+        <form id = "payment-form" action="https://rc-epay.esewa.com.np/api/epay/main/v2/form" method="POST">
+        <input type="hidden" id="amount" name="amount" value="<?php echo $amount; ?>" required>
+        <input type="hidden" id="tax_amount" name="tax_amount" value="<?php echo $tax_amount; ?>" required>
+        <input type="hidden" id="total_amount" name="total_amount" value="<?php echo $total_amount; ?>" required>
+        <input type="hidden" id="transaction_uuid" name="transaction_uuid" value="<?php echo $transaction_uuid; ?>" required>
+        <input type="hidden" id="product_code" name="product_code" value="<?php echo $product_code; ?>" required>
+        <input type="hidden" id="product_service_charge" name="product_service_charge" value="<?php echo $product_service_charge; ?>" required>
+        <input type="hidden" id="product_delivery_charge" name="product_delivery_charge" value="<?php echo $product_delivery_charge; ?>" required>
+        <input type="hidden" id="success_url" name="success_url" value="<?php echo $success_url; ?>" required>
+        <input type="hidden" id="failure_url" name="failure_url" value="<?php echo $failure_url; ?>" required>
+        <input type="hidden" id="signed_field_names" name="signed_field_names" value="total_amount,transaction_uuid,product_code" required>
+        <input type="hidden" id="signature" name="signature" value="<?php echo $signature; ?>" required>
+        <input value="Pay with esewa" type="submit">
     </form>
+        <!-- <form action="<?php echo $epay_url ?> " method="POST">
+          <input value="<?php echo calculateTotalPrice($_SESSION['cart']); ?>" name="tAmt" type="hidden">
+          <input value="<?php echo calculateTotalPrice($_SESSION['cart']); ?>" name="amt" type="hidden">
+          <input value="0" name="txAmt" type="hidden">
+          <input value="0" name="psc" type="hidden">
+          <input value="0" name="pdc" type="hidden">
+          <input value="EPAYTEST" name="scd" type="hidden">
+          <input value="<?php echo $epay_url ?>" name="pid" type="hidden">
+          <input value="http://merchant.com.np/page/esewa_payment_success?q=su" type="hidden" name="su">
+          <input value="http://merchant.com.np/page/esewa_payment_failed?q=fu" type="hidden" name="fu">
+          <input value="Pay with E-sewa" type="submit" class="checkout-cta">
+        </form> -->
         <div class="summary-checkout">
-            <button Continue</button>
-      </div>
+          <button Continue</button>
+        </div>
     </aside>
   </main>
 </body>

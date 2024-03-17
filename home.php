@@ -25,7 +25,7 @@ session_start();
   <?php if (isset($_SESSION["username"])) { ?>
     <li>
   <a href="cart/cart.php">
-    Wishlist
+    Cart
     <span class="wishlist-quantity">
       <?php
       $totalWishlistQuantity = 0; // Initialize the total quantity variable
@@ -142,7 +142,7 @@ session_start();
           <div class="footer-title">Get in Touch</div>
           <div class="app-info">
             <p>Azusa Shakya <strong>98033499441</strong></p>
-            <p>Nalina Kunwar <strong>9803772819</strong></p>
+            
           </div>
           <!-- <form action="send_email.php" method="post" class="space-y-2">
             <input type="text" name="g-name" class="g-inp" id="g-name" placeholder='Name' />
