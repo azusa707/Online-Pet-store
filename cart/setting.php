@@ -1,12 +1,9 @@
-<?php 
-
-// Change Info From Here
-
+<?php
 $epay_url = "https://uat.esewa.com.np/epay/main";
-$pid = "MiriStore";
-$successurl = "https://brp.com.np/esewa/success.php?q=su";
-$failedurl = "https://brp.com.np/esewa/failed.php?q=fu";
-$merchant_code = "EPAYTEST"; 
+$pid = "MiriStore99";
+$successurl = "success.php";
+$failedurl = "failed.php";
+$merchant_code = "epay_payment"; 
 $fraudcheck_url = "https://uat.esewa.com.np/epay/transrec";
 
 $actualamount = $totalPrice;

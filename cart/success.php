@@ -6,7 +6,7 @@ $ref = $_GET['refId'];
 $data =[
     'amt'=>$actualamount,
     'rid'=> $ref,
-    'pid'=>'MiriStore',
+    'pid'=>'MiriStore99',
     'scd'=> $merchant_code
 ];
 
@@ -20,9 +20,9 @@ $data =[
     curl_close($curl);
     
     if(strpos(  $response, "Success") !== false){
-        header("Location: https://drive.google.com/file/d/1Mab2MK6zmQzCUFrWpC8DVdc_tGqwCUMK/view?usp=drive_open");
+        header("Location: thank.php");
     } else{
-         header("Location: https://brp.com.np/esewa");
+         header("Location: cart.php");
     }
 
 ?>
