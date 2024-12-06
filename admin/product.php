@@ -89,7 +89,7 @@ $select = mysqli_query($conn, "SELECT * FROM products" . (!empty($product_catego
                 <input type="number" placeholder="Enter product price" name="product_price" class="box">
                 <input type="file" accept="image/png, image/jpeg, image/jpg" name="product_image" class="box">
                 <select name="product_category" class="box">
-                <option value="">Choose Category</option>
+                    <option value="">Choose Category</option>
                     <option value="Food">Food</option>
                     <option value="Toys">Toys</option>
                     <option value="Accessories">Accessories</option>
@@ -119,8 +119,7 @@ $select = mysqli_query($conn, "SELECT * FROM products" . (!empty($product_catego
                     </tr>
                 </thead>
                 <?php
-                // Code to fetch data from the database
-                // Replace this with your actual code to fetch data
+
                 $select = mysqli_query($conn, "SELECT * FROM products");
 
                 while ($row = mysqli_fetch_assoc($select)) {
